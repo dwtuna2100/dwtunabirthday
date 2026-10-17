@@ -1,0 +1,305 @@
+<!doctype html>
+<html lang="ko">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>너에게</title>
+<meta name="description" content="열어봐!">
+<meta property="og:type" content="website">
+<meta property="og:title" content="열어봐!">
+<meta property="og:description" content="열어봐!">
+<meta name="robots" content="noindex">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Pacifico&family=Hi+Melody&family=Gowun+Dodum&display=swap">
+<style>
+  /* Layout: one centered column. A pink birthday card (candle, falling confetti, typed script) on top, then photos and messages. */
+  :root {
+    --bg: #f3f0ff;
+    --fg: #231a4a;
+    --paper: #ffffff;
+    --muted: #6e68a0;
+    --line: #dcd5f5;
+    --accent: #6c47e0;
+    --card-a: #e4d9ff;
+    --card-b: #b9dcff;
+    --card-ink: #3d2a9a;
+    --font-script: "Pacifico", "Hi Melody", cursive;
+    --font-display: "Hi Melody", "Apple SD Gothic Neo", "Malgun Gothic", sans-serif;
+    --font-body: "Gowun Dodum", "Apple SD Gothic Neo", "Malgun Gothic", sans-serif;
+  }
+  @media (prefers-color-scheme: dark) {
+    :root:not([data-theme="light"]) {
+      --bg: #14112b; --fg: #eeeaff; --paper: #1f1a42; --muted: #a9a3e0; --line: #38306b;
+      --accent: #a98bff; color-scheme: dark;
+    }
+  }
+  :root[data-theme="dark"] {
+    --bg: #14112b; --fg: #eeeaff; --paper: #1f1a42; --muted: #a9a3e0; --line: #38306b;
+    --accent: #a98bff; color-scheme: dark;
+  }
+
+  body {
+    margin: 0;
+    background: var(--bg);
+    color: var(--fg);
+    font-family: var(--font-body);
+    font-size: 17px;
+    line-height: 1.7;
+    padding-block: 32px 56px;
+    padding-left: max(16px, env(safe-area-inset-left, 0px));
+    padding-right: max(16px, env(safe-area-inset-right, 0px));
+  }
+  main { max-width: 480px; margin: 0 auto; display: flex; flex-direction: column; gap: 32px; }
+  main > * { min-width: 0; }
+
+  .card {
+    position: relative;
+    overflow: hidden;
+    border-radius: 28px;
+    background: linear-gradient(160deg, var(--card-a), var(--card-b));
+    min-height: 520px;
+    min-height: calc(100vh - 64px);
+    min-height: calc(100svh - 64px);
+    display: flex; flex-direction: column; align-items: center; justify-content: center;
+    gap: 18px;
+    padding: 28px 16px 24px;
+    box-sizing: border-box;
+  }
+  #confetti { position: absolute; inset: 0; width: 100%; height: 100%; pointer-events: none; }
+  .cake-btn {
+    position: relative; z-index: 1;
+    background: none; border: 0; padding: 0; cursor: pointer;
+    width: min(66%, 250px);
+  }
+  .cake-btn svg { display: block; width: 100%; height: auto; overflow: visible; }
+  .layer {
+    transform-box: fill-box; transform-origin: 50% 100%;
+    animation: drop 0.95s ease-out both;
+    animation-delay: calc(0.3s + var(--i) * 0.6s);
+  }
+  @keyframes drop {
+    0%   { transform: translateY(-230px) rotate(calc(var(--dir) * -12deg)) scale(0.9, 1.14); opacity: 0; animation-timing-function: cubic-bezier(0.55, 0, 0.9, 0.6); }
+    18%  { opacity: 1; }
+    52%  { transform: translateY(0) rotate(calc(var(--dir) * 5deg)) scale(1.14, 0.78); animation-timing-function: ease-out; }
+    68%  { transform: translateY(-9px) rotate(calc(var(--dir) * -3deg)) scale(0.96, 1.08); animation-timing-function: ease-in-out; }
+    84%  { transform: translateY(0) rotate(calc(var(--dir) * 1.2deg)) scale(1.03, 0.96); }
+    100% { transform: none; opacity: 1; }
+  }
+  .lit { animation: light 0.5s ease-out both; animation-delay: 3.6s; transform-origin: 50% 100%; transform-box: fill-box; }
+  @keyframes light { from { opacity: 0; transform: scale(0.3); } to { opacity: 1; transform: scale(1); } }
+  .cake-btn:focus-visible { outline: 3px solid var(--card-ink); outline-offset: 6px; border-radius: 12px; }
+  .flame {
+    transform-origin: 50% 100%; transform-box: fill-box;
+    filter: drop-shadow(0 0 7px #ffd54a) drop-shadow(0 0 14px #ffb300);
+    animation: flicker 1.3s ease-in-out infinite;
+  }
+  .out .flame { display: none; }
+  .smoke { opacity: 0; }
+  .out .smoke { opacity: 0.6; transition: opacity 0.4s; }
+  @keyframes flicker {
+    0%, 100% { transform: scale(1) rotate(-2deg); }
+    50% { transform: scale(1.08, 1.16) rotate(3deg); }
+  }
+  .words { position: relative; z-index: 1; text-align: center; min-height: 6.2em; max-width: 100%; }
+  .script {
+    font-family: var(--font-script);
+    font-weight: 700;
+    font-size: clamp(28px, 8vw, 44px);
+    line-height: 1.2;
+    color: var(--card-ink);
+    text-shadow: 2px 2px 5px rgba(255, 255, 255, 0.7);
+    margin: 0;
+    overflow-wrap: anywhere;
+  }
+  .kor {
+    font-family: var(--font-display);
+    font-size: clamp(26px, 7vw, 34px);
+    font-weight: 700;
+    -webkit-text-stroke: 0.6px var(--card-ink);
+    color: var(--card-ink);
+    margin: 6px 0 0;
+    overflow-wrap: anywhere;
+  }
+  .caret::after { content: "|"; margin-left: 2px; animation: blink 0.8s steps(1) infinite; }
+  @keyframes blink { 50% { opacity: 0; } }
+  .hint { position: relative; z-index: 1; margin: 0; font-size: 14px; color: var(--card-ink); opacity: 0.85; }
+
+  section h2 { font-family: var(--font-display); font-weight: 400; font-size: 28px; margin: 0 0 12px; }
+  .photos { columns: 2; column-gap: 12px; }
+  .photos figure { margin: 0 0 12px; break-inside: avoid; }
+  .photos img { display: block; width: 100%; height: auto; border-radius: 12px; border: 1px solid var(--line); background: var(--paper); }
+
+  .notes-list { display: flex; flex-direction: column; gap: 16px; }
+  .note { background: var(--paper); border: 1px solid var(--line); border-radius: 16px; padding: 18px 20px; min-width: 0; }
+  .note p { margin: 0; overflow-wrap: anywhere; white-space: pre-wrap; }
+  .note:nth-child(odd) { transform: rotate(-0.6deg); }
+  .note:nth-child(even) { transform: rotate(0.6deg); }
+  .sign { text-align: right; font-family: var(--font-display); font-size: 24px; color: var(--accent); margin: 0; overflow-wrap: anywhere; }
+
+  @media (prefers-reduced-motion: reduce) {
+    .flame, .caret::after, .layer, .lit { animation: none; }
+    .note:nth-child(odd), .note:nth-child(even) { transform: none; }
+  }
+</style>
+</head>
+<body>
+<main>
+  <div class="card" id="card">
+    <canvas id="confetti" aria-hidden="true"></canvas>
+    <button class="cake-btn" id="cake" type="button" aria-label="촛불 끄기">
+      <svg viewBox="0 0 200 190" role="img" aria-hidden="true">
+        <rect x="20" y="168" width="160" height="5" rx="2.5" fill="#fff"/>
+        <g class="layer" style="--i:0; --dir:1"><rect x="40" y="142" width="120" height="26" rx="6" fill="#58362b"/></g>
+        <g class="layer" style="--i:1; --dir:-1"><rect x="38" y="135" width="124" height="8" rx="4" fill="#fffaf5"/></g>
+        <g class="layer" style="--i:2; --dir:1"><rect x="46" y="112" width="108" height="24" rx="6" fill="#6d4538"/></g>
+        <g class="layer" style="--i:3; --dir:-1"><path d="M46 106 h108 v6 q-5 14 -10 0 q-5 18 -11 0 q-5 10 -10 0 q-6 20 -12 0 q-5 12 -10 0 q-6 16 -12 0 q-5 8 -10 0 q-6 14 -12 0 q-5 6 -10 0 q-3 6 -11 0z" fill="#fffaf5"/></g>
+        <g class="layer" style="--i:4; --dir:1">
+          <rect x="93" y="58" width="14" height="49" rx="4" fill="#fff"/>
+          <rect x="93" y="72" width="14" height="5" fill="#7cc4ff"/>
+          <rect x="93" y="86" width="14" height="5" fill="#7cc4ff"/>
+        </g>
+        <g class="lit">
+          <path class="flame" d="M100 24 c-12 13 -9 27 0 31 c9 -4 12 -18 0 -31z" fill="#ffd54a"/>
+          <path class="flame" d="M100 38 c-5 6 -4 12 0 14 c4 -2 5 -8 0 -14z" fill="#fff4b0"/>
+        </g>
+        <g class="smoke" fill="none" stroke="#3d2a9a" stroke-width="2" stroke-linecap="round">
+          <path d="M100 52 q-6 -9 0 -17 q6 -8 0 -15"/>
+        </g>
+      </svg>
+    </button>
+    <div class="words" aria-live="polite">
+      <p class="script" id="line1"></p>
+      <p class="kor" id="line2"></p>
+    </div>
+    <p class="hint" id="hint">촛불을 눌러보세요</p>
+  </div>
+
+  <section id="photo-section" hidden>
+    <h2>우리 사진</h2>
+    <div class="photos" id="photo-list"></div>
+  </section>
+
+  <section id="note-section" hidden>
+    <h2>네게 전하는 말</h2>
+    <div id="note-list" class="notes-list"></div>
+  </section>
+
+  <p class="sign" id="sign"></p>
+</main>
+
+<script src="config.js"></script>
+<script>
+(function () {
+  var C = window.CARD || {};
+  var friend = (C.friend || "").trim();
+  var hasName = friend && friend !== "친구";
+  var sender = (C.sender || "").trim();
+  var messages = (C.messages || []).filter(function (m) { return m && String(m).trim(); });
+  var photos = C.photos || [];
+
+  function $(id) { return document.getElementById(id); }
+  function particle(name) {
+    var c = name.slice(-1).charCodeAt(0);
+    if (c >= 0xAC00 && c <= 0xD7A3) return (c - 0xAC00) % 28 !== 0 ? "아" : "야";
+    return "야";
+  }
+  var reduce = window.matchMedia && window.matchMedia("(prefers-reduced-motion: reduce)").matches;
+
+  /* 메시지, 사진, 보낸 사람 */
+  var list = $("note-list");
+  messages.forEach(function (m) {
+    var d = document.createElement("div"); d.className = "note";
+    var p = document.createElement("p"); p.textContent = m;
+    d.appendChild(p); list.appendChild(d);
+  });
+  $("note-section").hidden = messages.length === 0;
+  var pl = $("photo-list");
+  photos.forEach(function (src) {
+    var f = document.createElement("figure");
+    var img = document.createElement("img");
+    img.src = src; img.alt = "함께한 사진"; img.loading = "lazy";
+    f.appendChild(img); pl.appendChild(f);
+  });
+  $("photo-section").hidden = photos.length === 0;
+  $("sign").textContent = sender ? "- " + sender + " 가" : "";
+
+  /* 글씨가 한 글자씩 써지는 효과 */
+  var t1 = "Happy Birthday,";
+  var t2 = hasName ? friend + particle(friend) + ", 생일 축하해!" : "생일 축하해!";
+  var l1 = $("line1"), l2 = $("line2");
+  function typeInto(el, text, speed, done) {
+    if (reduce) { el.textContent = text; done && done(); return; }
+    var i = 0;
+    el.classList.add("caret");
+    (function step() {
+      el.textContent = text.slice(0, ++i);
+      if (i < text.length) setTimeout(step, speed);
+      else { el.classList.remove("caret"); done && done(); }
+    })();
+  }
+  setTimeout(function () {
+    typeInto(l1, t1, 85, function () { setTimeout(function () { typeInto(l2, t2, 70); }, 250); });
+  }, reduce ? 0 : 4200);
+
+  /* 촛불 */
+  var card = $("card"), hint = $("hint"), cake = $("cake"), out = false;
+  function setOut(v) {
+    out = v;
+    card.classList.toggle("out", out);
+    cake.setAttribute("aria-label", out ? "촛불 다시 켜기" : "촛불 끄기");
+    hint.textContent = out ? "소원은 빌었어? 한 번 더 누르면 다시 켜져요" : "촛불을 눌러보세요";
+    if (out) burst(90);
+  }
+  cake.addEventListener("click", function () { setOut(!out); });
+
+  /* 떨어지는 색종이 (카드 안) */
+  var cv = $("confetti"), ctx = cv.getContext("2d");
+  var W = 0, H = 0, bits = [];
+  var cols = ["rgba(255,255,255,0.85)", "rgba(167,139,250,0.75)", "rgba(125,200,255,0.8)", "rgba(255,213,74,0.85)"];
+  function size() {
+    var r = card.getBoundingClientRect(), dpr = window.devicePixelRatio || 1;
+    W = r.width; H = r.height;
+    cv.width = W * dpr; cv.height = H * dpr;
+    ctx.setTransform(dpr, 0, 0, dpr, 0, 0);
+  }
+  function make(y, burstMode) {
+    return {
+      x: burstMode ? W / 2 + (Math.random() - 0.5) * 60 : Math.random() * W,
+      y: y,
+      vx: burstMode ? (Math.random() - 0.5) * 10 : (Math.random() - 0.5) * 0.6,
+      vy: burstMode ? -Math.random() * 9 - 2 : 0.5 + Math.random() * 1.1,
+      s: 3 + Math.random() * 6,
+      round: Math.random() < 0.5,
+      r: Math.random() * 3, vr: (Math.random() - 0.5) * 0.12,
+      c: cols[(Math.random() * cols.length) | 0],
+      burst: !!burstMode
+    };
+  }
+  function burst(n) { if (reduce) return; for (var i = 0; i < n; i++) bits.push(make(H * 0.55, true)); }
+  window.addEventListener("resize", size);
+  size();
+  if (!reduce) {
+    for (var i = 0; i < 38; i++) bits.push(make(Math.random() * H, false));
+    (function loop() {
+      ctx.clearRect(0, 0, W, H);
+      for (var k = bits.length - 1; k >= 0; k--) {
+        var p = bits[k];
+        if (p.burst) p.vy += 0.3;
+        p.x += p.vx; p.y += p.vy; p.r += p.vr;
+        if (p.y > H + 12 || p.x < -20 || p.x > W + 20) {
+          if (p.burst) { bits.splice(k, 1); continue; }
+          p.y = -10; p.x = Math.random() * W;
+        }
+        ctx.save(); ctx.translate(p.x, p.y); ctx.rotate(p.r); ctx.fillStyle = p.c;
+        if (p.round) { ctx.beginPath(); ctx.arc(0, 0, p.s / 2, 0, 6.2832); ctx.fill(); }
+        else ctx.fillRect(-p.s / 2, -p.s / 4, p.s, p.s / 2);
+        ctx.restore();
+      }
+      requestAnimationFrame(loop);
+    })();
+  }
+})();
+</script>
+</body>
+</html>
